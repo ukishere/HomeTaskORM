@@ -34,7 +34,7 @@ def find_by_name(name, events):
 
     return result
 
-def sort_by_date(event):
+def sort_by_date(events):
     return list(events.find({}, {'_id': 0, 'Исполнитель': 1, 'Цена': 1, 'Место': 1, 'Дата': 1}).sort('Дата', 1))
 
 if __name__ == '__main__':
