@@ -10,7 +10,6 @@ def read_data(csv_file, events):
 
         for event in data:
             event['Цена'] = int(event['Цена'])
-            print(event['Дата'])
             event['Дата'] = datetime.strptime(event['Дата']+'.2020', '%d.%m.%Y')
         events.insert_many(data)
 
@@ -25,12 +24,7 @@ def find_by_name(name, events):
     name += '.*'
 
     pattern = re.compile(rf'{name}.*')
-    all_events = list(events.find({}, {'_id': 0, 'Исполнитель': 1, 'Цена': 1, 'Место': 1, 'Дата': 1}).sort('Цена', 1))
-    result = []
-
-    for test_event in all_events:
-        if re.match(pattern, test_event['Исполнитель']):
-            result.append(test_event)
+    result = list(events.find({'Исполнитель': pattern}, {'_id': 0, 'Исполнитель': 1, 'Цена': 1, 'Место': 1, 'Дата': 1}).sort('Цена', 1))
 
     return result
 
@@ -46,7 +40,7 @@ if __name__ == '__main__':
     read_data('artists.csv', events)
 
     # result = find_cheapest(events)
-    # result = find_by_name('t', events)
-    result = sort_by_date(events)
+    result = find_by_name('t', events)
+    # result = sort_by_date(events)
     for event in result:
         print(event)
